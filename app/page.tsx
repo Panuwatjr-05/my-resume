@@ -2,32 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import ProjectModal from "@/components/ProjectModal";
-import { projects, experiences, research, stack, activities } from "@/components/data";
+import { projects, experiences, research, stack, activities, ICONS } from "@/components/data";
 
-const ICONS: Record<string, string> = {
-  "TypeScript":        "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg",
-  "JavaScript":        "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg",
-  "Python":            "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg",
-  "Java":              "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg",
-  "HTML / CSS":        "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg",
-  "Next.js":           "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg",
-  "React":             "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg",
-  "Tailwind CSS":      "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg",
-  "Vite":              "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vitejs/vitejs-original.svg",
-  "PostgreSQL":        "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg",
-  "Prisma":            "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/prisma/prisma-original.svg",
-  "Supabase":          "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/supabase/supabase-original.svg",
-  "Git / GitHub":      "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg",
-  "Figma":             "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg",
-  "Docker":            "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg",
-  "Vercel":            "https://cdn.simpleicons.org/vercel/ffffff",
-  "VS Code":           "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg",
-  "Supabase Realtime": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/supabase/supabase-original.svg",
-  "NextAuth":          "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg",
-  "Cloudinary":        "https://cdn.simpleicons.org/cloudinary",
-  "LINE Messaging API":"https://cdn.simpleicons.org/line/00c300",
-  "n8n":               "https://cdn.simpleicons.org/n8n/ea4b71",
-};
 
 type Project = (typeof projects)[number];
 
@@ -339,13 +315,17 @@ export default function Home() {
                     {p.tech.slice(0, 4).map((t) => (
                       <span
                         key={t}
-                        className="text-xs px-3 py-1.5 rounded-lg font-medium"
+                        className="text-xs px-2.5 py-1.5 rounded-lg font-medium flex items-center gap-1.5"
                         style={{
                           background: "oklch(0.68 0.22 255 / 0.08)",
                           color: "oklch(0.72 0.12 255)",
                           border: "1px solid oklch(0.68 0.22 255 / 0.18)",
                         }}
                       >
+                        {ICONS[t] && (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={ICONS[t]} alt={t} width={13} height={13} style={{ flexShrink: 0 }} />
+                        )}
                         {t}
                       </span>
                     ))}
@@ -538,7 +518,7 @@ export default function Home() {
           </div>
           <div className="space-y-0">
             {[
-              { period: "2023 — 2026", degree: "B.Sc. Computer Science", school: "Naresuan University, Phitsanulok", status: "In Progress" },
+              { period: "2023 — Present", degree: "B.Sc. Computer Science", school: "Naresuan University, Phitsanulok", status: "In Progress" },
               { period: "2018 — 2023", degree: "Science-Mathematics Program", school: "Yangklon Wittaya School", status: null },
             ].map((ed, i) => (
               <div key={i} className="grid sm:grid-cols-[180px_1fr] gap-4 sm:gap-12 py-9 transition-colors hover:bg-white/[0.015] px-4 -mx-4 rounded-2xl"

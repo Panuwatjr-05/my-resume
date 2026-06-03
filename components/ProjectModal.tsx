@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { ICONS } from "@/components/data";
 
 type Detail = { role: string; items: string[] };
 type ProjectImage = { src: string; caption?: string };
@@ -161,9 +162,9 @@ export default function ProjectModal({
                     />
                   </div>
                   <div>
-                    <p className="text-xs font-medium mb-1" style={{ color: "oklch(0.72 0.08 255)" }}>ทดลองใช้งาน</p>
+                    <p className="text-xs font-medium mb-1" style={{ color: "oklch(0.72 0.08 255)" }}>Try it out</p>
                     <p className="text-sm leading-relaxed" style={{ color: "oklch(0.55 0.015 255)" }}>
-                      สแกน QR เพื่อ add LINE<br />แล้วเริ่มสั่งอาหารได้ทันที
+                      Scan QR to add LINE<br />and start ordering instantly
                     </p>
                   </div>
                 </div>
@@ -179,13 +180,17 @@ export default function ProjectModal({
                 {project.tech.map((t) => (
                   <span
                     key={t}
-                    className="text-xs px-2.5 py-1 rounded-md font-medium"
+                    className="text-xs px-2.5 py-1 rounded-md font-medium flex items-center gap-1.5"
                     style={{
                       background: "oklch(0.13 0.022 255)",
                       color: "oklch(0.68 0.22 255)",
                       border: "1px solid oklch(0.68 0.22 255 / 0.15)",
                     }}
                   >
+                    {ICONS[t] && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={ICONS[t]} alt={t} width={12} height={12} style={{ flexShrink: 0 }} />
+                    )}
                     {t}
                   </span>
                 ))}
