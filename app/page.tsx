@@ -214,7 +214,7 @@ export default function Home() {
               </h1>
 
               <p className="hero-item text-xl font-light mb-5" style={{ color: "oklch(0.6 0.02 255)", "--delay": 280 } as React.CSSProperties}>
-                Frontend · Backend · Full-Stack · Software Development
+                Frontend · Full-Stack · Software Development
               </p>
 
               <p className="hero-item text-base leading-relaxed mb-10" style={{ color: "var(--muted)", maxWidth: "52ch", textWrap: "pretty", "--delay": 360 } as React.CSSProperties}>
