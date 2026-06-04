@@ -54,7 +54,7 @@ export default function ProjectModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-6"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-6"
       onClick={onClose}
     >
       <div className="absolute inset-0 bg-black/80 backdrop-blur-md" />
@@ -69,13 +69,12 @@ export default function ProjectModal({
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex flex-1 min-h-0 overflow-hidden">
+        <div className="flex flex-col md:flex-row flex-1 min-h-0 overflow-hidden">
 
           {/* ── Left panel ── */}
           <div
-            className="flex flex-col overflow-y-auto shrink-0"
+            className="flex flex-col overflow-y-auto w-full md:w-[380px] flex-1 md:flex-none order-2 md:order-1"
             style={{
-              width: 380,
               borderRight: hasImages ? "1px solid oklch(0.16 0.022 255)" : undefined,
             }}
           >
@@ -233,9 +232,9 @@ export default function ProjectModal({
 
           {/* ── Right panel: image carousel ── */}
           {hasImages && (
-            <div className="flex flex-col flex-1 min-w-0" style={{ background: "oklch(0.16 0.05 255)" }}>
+            <div className="flex flex-col min-w-0 w-full flex-none h-[44vh] md:h-auto md:flex-1 order-1 md:order-2" style={{ background: "oklch(0.16 0.05 255)" }}>
               {/* Image + caption grouped together, centered in panel */}
-              <div className="relative flex-1 min-h-0 flex items-center justify-center overflow-hidden p-8">
+              <div className="relative flex-1 min-h-0 flex items-center justify-center overflow-hidden p-4 md:p-8">
 
                 {/* Nav buttons */}
                 {imgIndex > 0 && (
@@ -302,13 +301,13 @@ export default function ProjectModal({
 
                   {/* Caption + dots right below image */}
                   <div
-                    className="flex items-center justify-between gap-4 w-full px-4 py-2.5 rounded-xl"
+                    className="flex flex-col md:flex-row md:items-center justify-between gap-2 md:gap-4 w-full px-4 py-2.5 rounded-xl"
                     style={{
                       background: "oklch(0.12 0.06 255 / 0.8)",
                       border: "1px solid oklch(0.25 0.08 255 / 0.5)",
                     }}
                   >
-                    <p className="flex-1 text-sm" style={{ color: "oklch(0.75 0.04 255)" }}>
+                    <p className="flex-1 text-xs md:text-sm" style={{ color: "oklch(0.75 0.04 255)" }}>
                       {images[safeIndex].caption ?? ""}
                     </p>
                     {images.length > 1 && (
