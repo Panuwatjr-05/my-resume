@@ -20,6 +20,45 @@ type Project = {
   images?: ProjectImage[];
 };
 
+// Role badge colors — blue for end users, teal for providers, amber for admins.
+const ROLE_STYLES: Record<string, { color: string; bg: string; border: string }> = {
+  User:   { color: "oklch(0.78 0.15 255)", bg: "oklch(0.68 0.22 255 / 0.14)", border: "oklch(0.68 0.22 255 / 0.35)" },
+  Buyer:  { color: "oklch(0.78 0.15 255)", bg: "oklch(0.68 0.22 255 / 0.14)", border: "oklch(0.68 0.22 255 / 0.35)" },
+  Owner:  { color: "oklch(0.82 0.14 165)", bg: "oklch(0.72 0.15 165 / 0.14)", border: "oklch(0.72 0.15 165 / 0.35)" },
+  Seller: { color: "oklch(0.82 0.14 165)", bg: "oklch(0.72 0.15 165 / 0.14)", border: "oklch(0.72 0.15 165 / 0.35)" },
+  Admin:  { color: "oklch(0.83 0.15 70)",  bg: "oklch(0.75 0.15 70 / 0.14)",  border: "oklch(0.75 0.15 70 / 0.35)" },
+};
+const ROLE_FALLBACK = { color: "var(--accent)", bg: "oklch(0.68 0.22 255 / 0.12)", border: "oklch(0.68 0.22 255 / 0.3)" };
+
+function splitCaption(caption?: string): { role: string | null; text: string } {
+  if (!caption) return { role: null, text: "" };
+  const idx = caption.indexOf(" — ");
+  if (idx !== -1) {
+    const role = caption.slice(0, idx).trim();
+    if (role.length > 0 && role.length <= 12) return { role, text: caption.slice(idx + 3).trim() };
+  }
+  return { role: null, text: caption };
+}
+
+function CaptionText({ caption, textClass, descColor }: { caption?: string; textClass: string; descColor: string }) {
+  if (!caption) return null;
+  const { role, text } = splitCaption(caption);
+  const rs = role ? (ROLE_STYLES[role] ?? ROLE_FALLBACK) : null;
+  return (
+    <span className={textClass} style={{ color: descColor }}>
+      {role && rs && (
+        <span
+          className="inline-block text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded mr-2"
+          style={{ color: rs.color, background: rs.bg, border: `1px solid ${rs.border}`, transform: "translateY(-1px)" }}
+        >
+          {role}
+        </span>
+      )}
+      {text}
+    </span>
+  );
+}
+
 export default function ProjectModal({
   project,
   onClose,
@@ -27,16 +66,25 @@ export default function ProjectModal({
   project: Project | null;
   onClose: () => void;
 }) {
-  const [imgIndex, setImgIndex] = useState(0);
+  const [lightbox, setLightbox] = useState<number | null>(null);
 
   useEffect(() => {
     if (!project) return;
-    setImgIndex(0);
+    setLightbox(null);
+  }, [project]);
+
+  useEffect(() => {
+    if (!project) return;
+    const total = project.images?.length ?? 0;
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-      if (e.key === "ArrowLeft") setImgIndex((i) => Math.max(0, i - 1));
-      if (e.key === "ArrowRight")
-        setImgIndex((i) => Math.min((project.images?.length ?? 1) - 1, i + 1));
+      if (e.key === "Escape") {
+        if (lightbox !== null) setLightbox(null);
+        else onClose();
+      }
+      if (lightbox !== null) {
+        if (e.key === "ArrowLeft") setLightbox((i) => (i === null ? i : Math.max(0, i - 1)));
+        if (e.key === "ArrowRight") setLightbox((i) => (i === null ? i : Math.min(total - 1, i + 1)));
+      }
     };
     document.addEventListener("keydown", handleKey);
     document.body.style.overflow = "hidden";
@@ -44,15 +92,15 @@ export default function ProjectModal({
       document.removeEventListener("keydown", handleKey);
       document.body.style.overflow = "";
     };
-  }, [project, onClose]);
+  }, [project, onClose, lightbox]);
 
   if (!project) return null;
 
   const images = project.images ?? [];
   const hasImages = images.length > 0;
-  const safeIndex = Math.min(imgIndex, Math.max(0, images.length - 1));
 
   return (
+    <>
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-6"
       onClick={onClose}
@@ -230,122 +278,147 @@ export default function ProjectModal({
             </div>
           </div>
 
-          {/* ── Right panel: image carousel ── */}
+          {/* ── Right panel: image gallery ── */}
           {hasImages && (
-            <div className="flex flex-col min-w-0 w-full flex-none h-[44vh] md:h-auto md:flex-1 order-1 md:order-2" style={{ background: "oklch(0.16 0.05 255)" }}>
-              {/* Image + caption grouped together, centered in panel */}
-              <div className="relative flex-1 min-h-0 flex items-center justify-center overflow-hidden p-4 md:p-8">
-
-                {/* Nav buttons */}
-                {imgIndex > 0 && (
-                  <button
-                    onClick={() => setImgIndex((i) => i - 1)}
-                    className="absolute left-4 z-10 flex items-center justify-center w-9 h-9 rounded-full transition-all hover:scale-110 active:scale-95"
-                    style={{
-                      background: "oklch(0.12 0.022 255 / 0.95)",
-                      border: "1px solid oklch(0.25 0.022 255)",
-                      color: "var(--ink)",
-                      boxShadow: "0 4px 16px oklch(0 0 0 / 0.4)",
-                    }}
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                      <path d="m15 18-6-6 6-6" />
-                    </svg>
-                  </button>
-                )}
-                {imgIndex < images.length - 1 && (
-                  <button
-                    onClick={() => setImgIndex((i) => i + 1)}
-                    className="absolute right-4 z-10 flex items-center justify-center w-9 h-9 rounded-full transition-all hover:scale-110 active:scale-95"
-                    style={{
-                      background: "oklch(0.12 0.022 255 / 0.95)",
-                      border: "1px solid oklch(0.25 0.022 255)",
-                      color: "var(--ink)",
-                      boxShadow: "0 4px 16px oklch(0 0 0 / 0.4)",
-                    }}
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                      <path d="m9 18 6-6-6-6" />
-                    </svg>
-                  </button>
-                )}
-
-                {/* Image + caption as a unit */}
-                <div className="flex flex-col items-center gap-3 max-w-full max-h-full">
-                  <div className="relative rounded-xl overflow-hidden" style={{ maxHeight: "calc(100% - 64px)" }}>
-                    {/* Blurred backdrop for portrait images */}
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      aria-hidden
-                      src={images[safeIndex].src}
-                      alt=""
-                      className="absolute inset-0 w-full h-full object-cover scale-110"
-                      style={{ filter: "blur(20px) brightness(0.4)", zIndex: 0 }}
-                    />
-                    {/* Main image */}
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      key={imgIndex}
-                      src={images[safeIndex].src}
-                      alt={images[safeIndex].caption ?? `${project.title} screenshot ${imgIndex + 1}`}
-                      className="relative object-contain"
+            <div
+              className="min-w-0 w-full flex-none h-[48vh] md:h-auto md:flex-1 order-1 md:order-2 overflow-y-auto"
+              style={{ background: "oklch(0.16 0.05 255)" }}
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 p-4 md:p-6">
+                {images.map((img, i) => (
+                  <figure key={i} className="flex flex-col gap-2.5">
+                    <button
+                      type="button"
+                      onClick={() => setLightbox(i)}
+                      aria-label={`View image ${i + 1}${img.caption ? `: ${img.caption}` : ""}`}
+                      className="group relative rounded-xl overflow-hidden cursor-zoom-in transition-transform hover:-translate-y-0.5"
                       style={{
-                        zIndex: 1,
-                        maxWidth: "100%",
-                        maxHeight: "520px",
-                        boxShadow: "0 8px 48px oklch(0 0 0 / 0.5)",
+                        border: "1px solid oklch(0.25 0.05 255)",
+                        aspectRatio: "16 / 10",
+                        background: "oklch(0.97 0.003 255)",
                       }}
-                      onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
-                    />
-                  </div>
-
-                  {/* Caption + dots right below image */}
-                  <div
-                    className="flex flex-col md:flex-row md:items-center justify-between gap-2 md:gap-4 w-full px-4 py-2.5 rounded-xl"
-                    style={{
-                      background: "oklch(0.12 0.06 255 / 0.8)",
-                      border: "1px solid oklch(0.25 0.08 255 / 0.5)",
-                    }}
-                  >
-                    <p className="flex-1 text-xs md:text-sm" style={{ color: "oklch(0.75 0.04 255)" }}>
-                      {images[safeIndex].caption ?? ""}
-                    </p>
-                    {images.length > 1 && (
-                      <div className="flex items-center gap-3 shrink-0">
+                    >
+                      {/* Main image — full screenshot, never cropped */}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={img.src}
+                        alt={img.caption ?? `${project.title} screenshot ${i + 1}`}
+                        className="absolute inset-0 w-full h-full object-contain"
+                        loading="lazy"
+                        onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+                      />
+                      {/* Hover overlay with zoom hint */}
+                      <span
+                        className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100"
+                        style={{ background: "oklch(0.06 0.02 255 / 0.35)" }}
+                      >
                         <span
-                          className="text-xs font-mono px-2 py-0.5 rounded"
-                          style={{
-                            color: "var(--accent)",
-                            background: "oklch(0.68 0.22 255 / 0.12)",
-                            border: "1px solid oklch(0.68 0.22 255 / 0.2)",
-                          }}
+                          className="flex items-center justify-center w-10 h-10 rounded-full"
+                          style={{ background: "oklch(0.06 0.02 255 / 0.8)", border: "1px solid oklch(0.68 0.22 255 / 0.4)", color: "var(--accent)" }}
                         >
-                          {imgIndex + 1} / {images.length}
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3M11 8v6M8 11h6" />
+                          </svg>
                         </span>
-                        <div className="flex gap-1.5">
-                          {images.map((_, i) => (
-                            <button
-                              key={i}
-                              onClick={() => setImgIndex(i)}
-                              className="rounded-full transition-all duration-200"
-                              style={{
-                                width: i === imgIndex ? 20 : 6,
-                                height: 6,
-                                background: i === imgIndex ? "var(--accent)" : "oklch(0.32 0.05 255)",
-                                boxShadow: i === imgIndex ? "0 0 8px var(--accent)" : "none",
-                              }}
-                            />
-                          ))}
-                        </div>
-                      </div>
+                      </span>
+                      <span
+                        className="absolute top-2 left-2 text-[10px] font-mono px-1.5 py-0.5 rounded"
+                        style={{
+                          color: "var(--accent)",
+                          background: "oklch(0.10 0.03 255 / 0.85)",
+                          border: "1px solid oklch(0.68 0.22 255 / 0.25)",
+                        }}
+                      >
+                        {i + 1}
+                      </span>
+                    </button>
+                    {img.caption && (
+                      <figcaption className="px-0.5">
+                        <CaptionText caption={img.caption} textClass="text-xs leading-relaxed" descColor="oklch(0.7 0.03 255)" />
+                      </figcaption>
                     )}
-                  </div>
-                </div>
+                  </figure>
+                ))}
               </div>
             </div>
           )}
         </div>
       </div>
     </div>
+
+    {/* ── Lightbox: fullscreen image viewer ── */}
+    {lightbox !== null && images[lightbox] && (
+      <div
+        className="menu-enter fixed inset-0 z-[60] flex flex-col"
+        style={{ background: "oklch(0.04 0.015 255 / 0.97)", backdropFilter: "blur(8px)" }}
+        onClick={() => setLightbox(null)}
+      >
+        {/* Top bar */}
+        <div className="flex items-start justify-between p-5 md:p-6 shrink-0" onClick={(e) => e.stopPropagation()}>
+          <div>
+            <h3 className="text-lg font-bold" style={{ color: "var(--ink)" }}>{project.title}</h3>
+            <p className="text-xs mt-0.5" style={{ color: "var(--muted)" }}>
+              Image {lightbox + 1} of {images.length}
+            </p>
+          </div>
+          <button
+            onClick={() => setLightbox(null)}
+            aria-label="Close image viewer"
+            className="p-2 rounded-lg transition-colors hover:bg-white/10"
+            style={{ color: "var(--muted)" }}
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Image + caption area */}
+        <div
+          className="relative flex-1 min-h-0 flex flex-col items-center justify-center gap-4 px-4 md:px-20 pb-6"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {lightbox > 0 && (
+            <button
+              onClick={() => setLightbox((i) => (i === null ? i : i - 1))}
+              aria-label="Previous image"
+              className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center w-11 h-11 rounded-full transition-all hover:scale-110 active:scale-95"
+              style={{ background: "oklch(0.12 0.022 255 / 0.9)", border: "1px solid oklch(0.25 0.022 255)", color: "var(--ink)" }}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="m15 18-6-6 6-6" />
+              </svg>
+            </button>
+          )}
+          {lightbox < images.length - 1 && (
+            <button
+              onClick={() => setLightbox((i) => (i === null ? i : i + 1))}
+              aria-label="Next image"
+              className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center w-11 h-11 rounded-full transition-all hover:scale-110 active:scale-95"
+              style={{ background: "oklch(0.12 0.022 255 / 0.9)", border: "1px solid oklch(0.25 0.022 255)", color: "var(--ink)" }}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="m9 18 6-6-6-6" />
+              </svg>
+            </button>
+          )}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            key={lightbox}
+            src={images[lightbox].src}
+            alt={images[lightbox].caption ?? `${project.title} screenshot ${lightbox + 1}`}
+            className="max-w-full object-contain rounded-lg min-h-0"
+            style={{ boxShadow: "0 20px 80px oklch(0 0 0 / 0.6)" }}
+            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+          />
+          {images[lightbox].caption && (
+            <p className="shrink-0 text-center" style={{ maxWidth: "70ch" }}>
+              <CaptionText caption={images[lightbox].caption} textClass="text-sm md:text-base" descColor="oklch(0.85 0.02 255)" />
+            </p>
+          )}
+        </div>
+      </div>
+    )}
+    </>
   );
 }
