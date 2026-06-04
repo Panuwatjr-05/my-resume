@@ -6,7 +6,7 @@
 
 <br/>
 
-[![Email](https://img.shields.io/badge/Gmail-panuwatr66%40nu.ac.th-4d9fff?style=flat-square&logo=gmail&logoColor=4d9fff&labelColor=0a0a1a)](mailto:panuwatr66@nu.ac.th)
+[![Email](https://img.shields.io/badge/Gmail-panuwatjr2%40gmail.com-4d9fff?style=flat-square&logo=gmail&logoColor=4d9fff&labelColor=0a0a1a)](mailto:panuwatjr2@gmail.com)
 [![GitHub](https://img.shields.io/badge/GitHub-Panuwatjr--05-4d9fff?style=flat-square&logo=github&logoColor=4d9fff&labelColor=0a0a1a)](https://github.com/Panuwatjr-05)
 
 </div>
