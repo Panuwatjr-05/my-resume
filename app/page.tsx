@@ -636,12 +636,12 @@ export default function Home() {
               ].map((c) => (
                 <a key={c.type} href={c.href} target={(c as { target?: string }).target}
                   rel={(c as { target?: string }).target ? "noopener noreferrer" : undefined}
-                  className="flex flex-col gap-4 p-5 rounded-xl transition-colors hover:bg-white/[0.05]"
+                  className="flex flex-col gap-3 p-4 rounded-xl transition-colors hover:bg-white/[0.05] overflow-hidden"
                   style={{ border: "1px solid oklch(0.22 0.03 255)" }}>
                   <span style={{ color: "var(--accent)" }}>{c.icon}</span>
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-[10px] font-medium tracking-[0.1em] uppercase" style={{ color: "oklch(0.38 0.015 255)" }}>{c.type}</span>
-                    <span className="text-sm font-medium" style={{ color: "oklch(0.78 0.015 255)" }}>{c.label}</span>
+                  <div className="flex flex-col gap-0.5 min-w-0">
+                    <span className="text-[9px] font-medium tracking-[0.1em] uppercase" style={{ color: "oklch(0.38 0.015 255)" }}>{c.type}</span>
+                    <span className="text-xs font-medium truncate" style={{ color: "oklch(0.78 0.015 255)" }}>{c.label}</span>
                   </div>
                 </a>
               ))}
