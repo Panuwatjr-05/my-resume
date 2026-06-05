@@ -91,7 +91,7 @@ export default function Home() {
             >
               About me
             </a>
-            {["Work", "Stack", "Research", "Experience", "Activity", "Contact"].map((s) => (
+            {["Projects", "Stack", "Research", "Experience", "Activity", "Contact"].map((s) => (
               <a
                 key={s}
                 href={`#${s.toLowerCase()}`}
@@ -165,7 +165,7 @@ export default function Home() {
               >
                 About me
               </a>
-              {["Work", "Stack", "Research", "Experience", "Activity", "Contact"].map((s) => (
+              {["Projects", "Stack", "Research", "Experience", "Activity", "Contact"].map((s) => (
                 <a
                   key={s}
                   href={`#${s.toLowerCase()}`}
@@ -214,18 +214,19 @@ export default function Home() {
               </h1>
 
               <p className="hero-item text-xl font-light mb-5" style={{ color: "oklch(0.6 0.02 255)", "--delay": 280 } as React.CSSProperties}>
-                Frontend · Full-Stack · Software Development
+                Frontend · Full-Stack · Backend · Software Development · QA
               </p>
 
-              <p className="hero-item text-base leading-relaxed mb-10" style={{ color: "var(--muted)", maxWidth: "52ch", textWrap: "pretty", "--delay": 360 } as React.CSSProperties}>
-                Computer Science student at Naresuan University with a passion for building and
-                problem-solving through code. Seeking an internship in Frontend, Backend, Full-Stack,
-                or Software Development to gain hands-on experience and grow as a developer.
+              <p className="hero-item text-base mb-10" style={{ color: "var(--muted)", maxWidth: "46ch", lineHeight: 1.75, textWrap: "balance", "--delay": 360 } as React.CSSProperties}>
+                Computer Science student at Naresuan University, passionate about web development
+                and building web applications that are easy to use and scalable. Seeking an internship
+                in Frontend, Full-Stack, Backend, Software Development, or QA to apply real-world skills
+                and grow as a well-rounded developer.
               </p>
 
               <div className="hero-item flex flex-wrap gap-4" style={{ "--delay": 440 } as React.CSSProperties}>
                 <a
-                  href="/Panuwat rapromma_CV_NU_SCI.pdf"
+                  href="/Panuwat_rapromma_CV_NU.pdf"
                   download
                   className="px-6 py-3 text-base font-medium rounded-xl transition-all hover:opacity-90 flex items-center gap-2"
                   style={{
@@ -259,7 +260,7 @@ export default function Home() {
         </section>
 
         {/* ── Projects ───────────────────────────────── */}
-        <section id="work" className={`pb-28 ${W}`}>
+        <section id="projects" className={`pb-28 ${W}`}>
           <div className="section-label mb-12">
             <h2 className="text-2xl font-semibold" style={{ color: "var(--ink)", textWrap: "balance" } as React.CSSProperties}>Projects</h2>
           </div>

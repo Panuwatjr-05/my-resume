@@ -311,6 +311,9 @@ export const ICONS: Record<string, string> = {
   "Cloudinary":        "https://cdn.simpleicons.org/cloudinary",
   "LINE Messaging API":"https://cdn.simpleicons.org/line/00c300",
   "n8n":               "https://cdn.simpleicons.org/n8n/ea4b71",
+  "AWS":               "https://www.vectorlogo.zone/logos/amazon_aws/amazon_aws-icon.svg",
+  "DBeaver":           "https://cdn.simpleicons.org/dbeaver/cd9b6a",
+  "pgAdmin":           "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/pgadmin.svg",
 };
 
 export const stack = [
@@ -328,7 +331,7 @@ export const stack = [
   },
   {
     category: "Tools",
-    items: ["Git / GitHub", "Figma", "Docker", "Vercel", "Prisma", "n8n"],
+    items: ["Git / GitHub", "Figma", "Docker", "Vercel", "Prisma", "n8n", "DBeaver", "pgAdmin"],
   },
   {
     category: "Services",
