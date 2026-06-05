@@ -524,7 +524,7 @@ export default function Home() {
           <div className="space-y-0">
             {[
               { period: "2023 — Present", degree: "B.Sc. Computer Science", school: "Naresuan University, Phitsanulok", status: "In Progress" },
-              { period: "2018 — 2023", degree: "Science-Mathematics Program", school: "Yangklon Wittaya School", status: null },
+              { period: "2020 — 2022", degree: "Science-Mathematics Program", school: "Yangklon Wittaya School", status: null },
             ].map((ed, i) => (
               <div key={i} className="grid sm:grid-cols-[180px_1fr] gap-4 sm:gap-12 py-9 transition-colors hover:bg-white/[0.015] px-4 -mx-4 rounded-2xl"
                 style={{ borderTop: "1px solid var(--border)" }}>

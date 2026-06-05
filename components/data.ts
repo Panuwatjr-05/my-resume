@@ -6,7 +6,7 @@ export const projects = [
     tagline: "Dormitory discovery platform for Naresuan University students",
     description:
       "A web application centralizing dormitory listings near Naresuan University, allowing students to search, compare, and choose accommodations in one place.",
-    tech: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "NextAuth", "Cloudinary", "Vercel"],
+    tech: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "Supabase", "NextAuth", "Cloudinary", "Vercel"],
     github: "https://github.com/Panuwatjr-05/NUDorm",
     live: "https://nu-dorm.vercel.app",
     images: [
@@ -176,7 +176,7 @@ export const projects = [
     tagline: "Personal planning app replacing traditional note-taking",
     description:
       "A full-stack personal planning application that replaces traditional note-taking with a structured and organized digital workflow.",
-    tech: ["Next.js", "TypeScript", "Tailwind CSS", "Supabase", "PostgreSQL", "Cloudinary", "Vercel"],
+    tech: ["Next.js", "TypeScript", "Supabase", "PostgreSQL", "Cloudinary", "Vercel"],
     github: "https://github.com/Panuwatjr-05/Planning",
     live: "https://planning-pearl-xi.vercel.app",
     images: [
